@@ -1,0 +1,12 @@
+; Reset registers
+07 10 00 00 ; reg1 = 0
+07 20 00 00 ; reg2 = 0
+; Get other program's PC
+05 10 00 2b ; LOAD reg1 = mem[reg0 + 43] ; ENEMY PC ; 0
+01 10 00 04 ; ENEMY PC += 4 ; 1
+; Prepare bomb
+21 20 50 00 ; reg2 = BOMB 0? ?? ?? ; 2
+; Place it there
+06 21 00 00 ; mem[ENEMY PC + 1] = BOMB 0 ; 3
+; Jump back and start again
+11 00 00 06 ; REVJUMP reg0, reg0, 0x0006
