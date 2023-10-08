@@ -10,7 +10,6 @@ class Process:
     pc: int
     registers: list[int]
     user_id: str
-    memory_size: int
     alive: bool = True
 
     def __init__(self, state: SharedState, user_id: str):

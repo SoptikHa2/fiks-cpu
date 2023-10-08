@@ -1,8 +1,10 @@
+import orjson as json
 import sys
 from pathlib import Path
 from typing import Tuple
 
 from instructions.base import ProgramError
+from log import Log
 from process import Process
 from shared_state import SharedState
 
@@ -22,16 +24,7 @@ def load_program_instructions(path: Path) -> list[int]:
             yield int(line, 16)
 
 
-def main():
-    sources: list[Tuple[str, list[int]]] = []
-
-    # Get source code
-    for file in sys.argv[1:]:
-        sources.append((file, list(load_program_instructions(Path(file)))))
-
-    if len(sources) == 0 or len(sources) > 8:
-        raise ValueError("Invalid number of programs. Must be between 1 and 8")
-
+def create_program(sources: list[Tuple[str, list[int]]]) -> list[Process]:
     mem = [0] * (len(sources) + 1) * 256
 
     # Generate programs
@@ -53,21 +46,45 @@ def main():
 
         starting_pc += 256
 
+    return processes
+
+
+def main():
+    sources: list[Tuple[str, list[int]]] = []
+    log: Log = Log()
+
+    # Get source code
+    for file in sys.argv[1:]:
+        sources.append((file, list(load_program_instructions(Path(file)))))
+
+    if len(sources) == 0 or len(sources) > 8:
+        raise ValueError("Invalid number of programs. Must be between 1 and 8")
+
+    processes = create_program(sources)
+
     limit_iters = 0
     while sum([p.alive for p in processes]) > 1:
         limit_iters += 1
         if limit_iters > 10000:
-            print("Timed out")
+            for p in processes:
+                if p.alive:
+                    p.kill()
+                    log.record_death(p, "Timed out")
             break
 
         for p in processes:
             if p.alive:
                 try:
                     p.next()
-                    print(p)
+                    log.append_turn(p)
                 except ProgramError as e:
-                    print(f"Program {p.user_id} terminated with error: {e}")
                     p.kill()
+                    log.record_death(p, str(e))
+
+    if len(alive := [p for p in processes if p.alive]) == 1: # We have a winner!
+        log.set_winner(alive[0])
+
+    print(json.dumps(log).decode("utf-8"))
 
 
 if __name__ == '__main__':
