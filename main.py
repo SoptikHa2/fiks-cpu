@@ -12,7 +12,7 @@ def load_program_instructions(path: Path) -> list[int]:
         for line in f:
             if ';' in line:
                 line = line[:line.index(';')]
-            line = line.replace(" ", "").replace("\t", "")
+            line = line.replace(" ", "").replace("\t", "").strip()
 
             if len(line) == 0:
                 continue
@@ -57,6 +57,7 @@ def main():
     while sum([p.alive for p in processes]) > 1:
         limit_iters += 1
         if limit_iters > 10000:
+            print("Timed out")
             break
 
         for p in processes:

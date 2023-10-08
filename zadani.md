@@ -128,3 +128,37 @@ Po uzavření úlohy proběhne finální souboj, na základě kterého bude rozd
 Maximum bodů, kolik můžeš získat, je 10.
 
 Získané body za souboje uvidíš na portálu `fiks.soptik.tech`, do sfingy budou nahrané později po konci kola.
+
+## Příklady
+
+Následující program spočítá faktoriál čísla `4` (vstup je uložen v registru 1, výstup bude v registru 2).
+
+```
+; reg1 = 4
+; reg2 = 1
+; while (reg1 != 0) {
+; reg2 *= reg1
+; reg1--;
+; }
+; ; reg2 = 24
+
+; Move 4 to register 1
+07 10 00 04 ; reg1 = reg0 + 4 (reg 0 is always zero)
+            ; This could also be achieved by using SETIMMLOW.
+; Move 1 to register 2
+07 20 00 01 ; reg2 = reg0 + 1
+; Loop start
+; if reg1 is zero, jump to end
+10 10 00 05 ; if (reg1 == reg0) pc += 4 (skip the whole loop here)
+
+; reg2 *= reg1
+03 21 00 00 ; reg2 *= reg1
+; reg1--
+02 10 00 01 ; reg1 -= 1
+; Jump to loop start
+11 00 00 03 ; If reg0 is equal to reg0, jump three instructions backwards (to loop start)
+; LOOP END
+69 00 00 00 ; NOP
+
+; reg2 is now 24
+```
