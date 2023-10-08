@@ -18,7 +18,7 @@ Narozdíl od běžného programování tu je pár drobných rozdílů.
 
 Tvůj program běží, dokud nenastane některé z následujícího:
 - Vykonal jsi neplatnou instrukci. Tedy něco, co není v tabulce níže. Toto se může snadno stát,
-  pokud jsi neopatrně zapisoval do paměti a špatně sis papřepsal instrukce.
+  pokud jsi neopatrně zapisoval do paměti a špatně sis přepsal instrukce.
 - Vykonal jsi instrukci "bomba" ve chvíli, kdy zbývala na odpočtu nula.
 - Zacyklil jsi se. (Formálně: vykonal jsi totožnou sekvenci instrukcí na totožných adresách třikrát za sebou.)
 
@@ -137,8 +137,8 @@ Následující program spočítá faktoriál čísla `4` (vstup je uložen v reg
 ; reg1 = 4
 ; reg2 = 1
 ; while (reg1 != 0) {
-; reg2 *= reg1
-; reg1--;
+;   reg2 *= reg1
+;   reg1--
 ; }
 ; ; reg2 = 24
 
@@ -151,13 +151,14 @@ Následující program spočítá faktoriál čísla `4` (vstup je uložen v reg
 ; if reg1 is zero, jump to end
 10 10 00 05 ; if (reg1 == reg0) pc += 4 (skip the whole loop here)
 
-; reg2 *= reg1
-03 21 00 00 ; reg2 *= reg1
-; reg1--
-02 10 00 01 ; reg1 -= 1
-; Jump to loop start
-11 00 00 03 ; If reg0 is equal to reg0, jump three instructions backwards (to loop start)
+  ; reg2 *= reg1
+  03 21 00 00 ; reg2 *= reg1
+  ; reg1--
+  02 10 00 01 ; reg1 -= 1
+  ; Jump to loop start
+  11 00 00 03 ; If reg0 is equal to reg0, jump three instructions backwards (to loop start)
 ; LOOP END
+
 69 00 00 00 ; NOP
 
 ; reg2 is now 24
