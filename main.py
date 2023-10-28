@@ -63,6 +63,8 @@ def main():
 
     processes = create_program(sources)
 
+    log.init_players([p.user_id for p in processes])
+
     limit_iters = 0
     while sum([p.alive for p in processes]) > 1:
         limit_iters += 1
