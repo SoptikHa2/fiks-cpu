@@ -51,10 +51,11 @@ def create_program(sources: list[Tuple[str, list[int]]]) -> list[Process]:
 
 def main():
     sources: list[Tuple[str, list[int]]] = []
-    log: Log = Log()
+    log_memory = sys.argv[1]
+    log: Log = Log(log_memory=log_memory == "1")
 
     # Get source code
-    for file in sys.argv[1:]:
+    for file in sys.argv[2:]:
         sources.append((file, list(load_program_instructions(Path(file)))))
 
     if len(sources) == 0 or len(sources) > 8:

@@ -16,6 +16,7 @@ class PlayerLog:
 
 @dataclass
 class Log:
+    log_memory: bool
     players: dict[str, PlayerLog] = field(default_factory=dict)
     winner: str | None = None
     survived: dict[str, int] = field(default_factory=dict)
@@ -25,6 +26,9 @@ class Log:
         registers = process.registers
         memory = process.state.memory[max(0,process.pc-10):min(len(process.state.memory)-1, process.pc+10)]
         instruction = process.state.memory[process.pc]
+
+        if not self.log_memory:
+            memory = []
 
         if player_id not in self.players:
             self.players[player_id] = PlayerLog([])
