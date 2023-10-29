@@ -42,7 +42,7 @@ class Instruction(ABC):
     def _write_reg(self, reg: int, value: int):
         if reg < 0 or reg >= len(self._registers):
             raise ProgramError(f"Invalid register {reg}")
-        self._registers[reg] = value % 0xFFFFFFFF
+        self._registers[reg] = abs(value) % 0xFFFFFFFF
 
     def _read_mem(self, address: int) -> int:
         if address == 42:
@@ -69,4 +69,4 @@ class Instruction(ABC):
     def _write_mem(self, address: int, value: int):
         if address < 0 or address >= len(self._memory):
             raise ProgramError(f"Invalid memory address {address}")
-        self._memory[address] = value % 0xFFFFFFFF
+        self._memory[address] = abs(value) % 0xFFFFFFFF
