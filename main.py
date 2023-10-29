@@ -78,13 +78,13 @@ def main():
         for p in processes:
             if p.alive:
                 try:
-                    p.next()
                     log.append_turn(p)
+                    p.next()
                 except ProgramError as e:
                     p.kill()
                     log.record_death(p, str(e))
 
-    if len(alive := [p for p in processes if p.alive]) == 1: # We have a winner!
+    if len(alive := [p for p in processes if p.alive]) == 1:  # We have a winner!
         log.set_winner(alive[0])
 
     log.cut_log(2500)
