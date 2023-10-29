@@ -87,7 +87,7 @@ def main():
     if len(alive := [p for p in processes if p.alive]) == 1: # We have a winner!
         log.set_winner(alive[0])
 
-    log.cut_log(1000)
+    log.cut_log(2500)
 
     print(json.dumps(log).decode("utf-8"))
 
