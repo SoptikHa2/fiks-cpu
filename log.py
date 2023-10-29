@@ -8,6 +8,7 @@ class TurnSnapshot:
     next_instruction: int
     memory: list[int]
     memory_dump_start: int | None
+    pc: int | None = None
 
 
 @dataclass
@@ -35,10 +36,10 @@ class Log:
         memory = []
         memory_dump_start = None
         if self.log_memory:
-            memory = process.state.memory[max(0, process.pc - 10):min(len(process.state.memory) - 1, process.pc + 10)]
-            memory_dump_start = max(0, process.pc - 10)
+            memory = process.state.memory.copy()
+            memory_dump_start = 0
 
-        self.players[player_id].turns.append(TurnSnapshot(registers, instruction, memory, memory_dump_start))
+        self.players[player_id].turns.append(TurnSnapshot(registers, instruction, memory, memory_dump_start, process.pc))
 
     def record_death(self, process: Process, reason: str):
         player_id = process.user_id
