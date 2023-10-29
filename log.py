@@ -2,7 +2,6 @@ from dataclasses import dataclass, field
 
 from process import Process
 
-
 @dataclass
 class TurnSnapshot:
     registers: list[int]
@@ -49,3 +48,7 @@ class Log:
     def set_winner(self, process: Process):
         self.winner = process.user_id
         self.survived[process.user_id] = len(self.players[process.user_id].turns)
+
+    def cut_log(self, max_turns: int):
+        for player in self.players.keys():
+            self.players[player].turns = self.players[player].turns[:max_turns]
