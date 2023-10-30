@@ -34,8 +34,8 @@ def create_program(sources: list[Tuple[str, list[int]]]) -> list[Process]:
     state = SharedState(mem, starting_pcs)
 
     for source in sources:
-        if len(source[1]) >= 256:
-            raise ValueError("Program too long. Must be at most 255 instructions")
+        if len(source[1]) > 256:
+            raise ValueError("Program too long. Must be at most 256 instructions")
 
         instr = starting_pc
         starting_pcs[source[0]] = starting_pc
