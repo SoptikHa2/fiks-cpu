@@ -28,16 +28,21 @@ class Log:
         for player in players:
             self.players[player] = PlayerLog([])
 
-    def append_turn(self, process: Process):
+    def append_turn(self, process: Process, detailed_memory: bool):
         player_id = process.user_id
         registers = process.registers.copy()
         instruction = process.state.memory[process.pc]
 
         memory = []
         memory_dump_start = None
-        if self.log_memory:
+        if self.log_memory and detailed_memory:
             memory = process.state.memory.copy()
             memory_dump_start = 0
+        elif self.log_memory and not detailed_memory:
+            mem_from = max(0, process.pc-5)
+            mem_to = min(len(process.state.memory), process.pc+5)
+            memory = process.state.memory[mem_from:mem_to]
+            memory_dump_start = mem_from
 
         self.players[player_id].turns.append(TurnSnapshot(registers, instruction, memory, memory_dump_start, process.pc))
 

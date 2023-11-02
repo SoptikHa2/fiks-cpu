@@ -52,7 +52,8 @@ def create_program(sources: list[Tuple[str, list[int]]]) -> list[Process]:
 def main():
     sources: list[Tuple[str, list[int]]] = []
     log_memory = sys.argv[1]
-    log: Log = Log(log_memory=log_memory == "1")
+    detailed_memory = log_memory == "1"
+    log: Log = Log(log_memory=log_memory != "0")
 
     # Get source code
     for file in sys.argv[2:]:
@@ -78,7 +79,7 @@ def main():
         for p in processes:
             if p.alive:
                 try:
-                    log.append_turn(p)
+                    log.append_turn(p, detailed_memory)
                     p.next()
                 except ProgramError as e:
                     p.kill()
