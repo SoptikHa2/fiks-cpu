@@ -24,7 +24,9 @@ class Process:
         self.executed_instructions = []
 
     def next(self):
-        self.executed_instructions.append((self.pc, self.state.memory[self.pc]))
+        # if is not stuck at teleport rn
+        if not self.user_id in self.state.player_teleport:
+            self.executed_instructions.append((self.pc, self.state.memory[self.pc]))
         self.pc += execute_instruction(self.state, self.user_id, self.registers)
         self._normalize_pc()
         # If not in whitelist
