@@ -8,6 +8,7 @@ class SETIMMHIGH(Instruction):
         reg1 = self._parse_params(0, 4)
         imm = self._parse_params(8, 16)
 
-        self._write_reg(reg1, imm << 16)
+        old_value = self._read_reg(reg1) & 0xFFFF
+        self._write_reg(reg1, imm << 16 | old_value)
 
         return 1
